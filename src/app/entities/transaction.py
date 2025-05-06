@@ -1,0 +1,67 @@
+from typing import Tuple
+from src.app.enums.transactions_type_enum import TransationsType
+from src.app.errors.entity_errors import ParamNotValidated
+
+
+class Transaction:
+    transaction_type: TransationsType
+    value: float
+    timestamp: float
+
+    def __init__(self, transaction_type: TransationsType=None, value: float=None, timestamp: float=None):
+
+        validation_transaction_type = self.validate_type(transaction_type)
+        if validation_transaction_type[0] is False:
+            raise ParamNotValidated("type", validation_transaction_type[1])
+        self.transaction_type = transaction_type
+
+        validation_value = self.validate_value(value)
+        if validation_value[0] is False:
+            raise ParamNotValidated("value", validation_value[1])
+        self.value = value
+
+        validation_timestamp = self.validate_timestamp(timestamp)
+        if validation_timestamp[0] is False:
+            raise ParamNotValidated("timestamp", validation_timestamp[1])
+        self.timestamp = timestamp
+
+    @staticmethod
+    def validate_type(transaction_type: TransationsType)  -> Tuple[bool, str]:
+        if transaction_type is None:
+            return (False, "Transaction type is required")  
+        if type(transaction_type) != TransationsType:
+            return (False, "The type of field Transaction type must be TransactionsType")
+        return (True, "")
+    
+    @staticmethod
+    def validate_value(value: float) -> Tuple[bool, str]:
+        if value is None:
+            return (False, "Transaction value is required")
+        if type(value) != float:
+            return (False, "Transaction value type must be float")
+        if value < 0:
+            return (False, "Transaction must be positive")
+        return (True, "")
+    
+    @staticmethod
+    def validate_timestamp(timestamp: float) -> Tuple[bool, str]:
+        if timestamp is None:
+            return (False, "Transaction timestamp is required")
+        if type(timestamp) != float:
+            return (False, "Transaction timestamp type must be float")
+        if timestamp < 0:
+            return (False, "There is no such thing as time travel. Transaction timestamp must be positive")
+        return (True, "")
+
+    def to_dict(self):
+        return {
+            "type": self.transaction_type.value,
+            "value": self.value,
+            "timestamp": self.timestamp
+        }
+
+    def __eq__(self, other):
+        return self.transaction_type == other.transaction_type and self.value == other.value and self.timestamp == other.timestamp
+    
+    def __repr__(self):
+        return f"Transaction(type={self.transaction_type}, value={self.value}, timestamp={self.timestamp})"
