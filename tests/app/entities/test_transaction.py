@@ -1,0 +1,62 @@
+import time
+
+import pytest
+from src.app.entities.transaction import Transaction
+from src.app.enums.transactions_type_enum import TransationsType
+from src.app.errors.entity_errors import ParamNotValidated
+
+
+class Test_Transaction:
+    def test_transaction(self):
+        curr_timestamp = time.time()
+        transaction = Transaction(TransationsType.DEPOSIT, 100.0, curr_timestamp)
+        assert transaction.transaction_type == TransationsType.DEPOSIT
+        assert transaction.value == 100.0
+        assert transaction.timestamp == curr_timestamp
+
+    def test_transaction_dict(self):
+        curr_timestamp = time.time()
+        transaction = Transaction(TransationsType.WITHDRAW, 100.0, curr_timestamp)
+        assert transaction.to_dict() == {
+            "type": "withdraw",
+            "value": 100.0,
+            "timestamp": curr_timestamp
+        }
+
+    def test_transaction_type_is_none(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(100.0, curr_timestamp)
+
+    def test_transaction_type_is_not_from_enum(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction('eu nao existo' , 100.0, curr_timestamp)
+
+    def test_transaction_value_is_none(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(transaction_type=TransationsType.WITHDRAW, timestamp=curr_timestamp)
+
+    def test_transaction_value_is_not_float(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(TransationsType.WITHDRAW, '100.0', curr_timestamp)
+
+    def test_transaction_value_is_negative(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(TransationsType.WITHDRAW, -100.0, curr_timestamp)
+
+    def test_transaction_timestamp_is_none(self):
+        with pytest.raises(ParamNotValidated):
+            Transaction(transaction_type=TransationsType.WITHDRAW, value=100.0)
+
+    def test_transaction_timestamp_is_not_float(self):
+        with pytest.raises(ParamNotValidated):
+            Transaction(TransationsType.WITHDRAW, 100.0, 'tempo em string')
+
+    def test_transaction_timestamp_is_negative(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(TransationsType.WITHDRAW, 100.0, -100)
