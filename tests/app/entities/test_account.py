@@ -1,6 +1,6 @@
 import pytest
 from src.app.entities.account import Account
-from src.app.enums.item_type_enum import ItemTypeEnum
+from src.app.enums.transactions_type_enum import TransationsType
 from src.app.errors.entity_errors import ParamNotValidated
 
 
@@ -12,7 +12,7 @@ class Test_Account:
         assert account.account_number == "00000-0"
         assert account.current_balance == 1000.0
         
-    def test_item_dict(self):
+    def test_account_dict(self):
         account = Account("Victor", "0000", "00000-0", 1000.0)
         assert account.to_dict() == {
             "name": "Victor",
@@ -21,19 +21,19 @@ class Test_Account:
             "current_balance": 1000.0
         }
     
-    def test_item_name_is_none(self):
+    def test_account_name_is_none(self):
         with pytest.raises(ParamNotValidated):
             Account("0000", "00000-0", 1000.0)
             
-    def test_item_name_is_too_short(self):
+    def test_account_name_is_too_short(self):
         with pytest.raises(ParamNotValidated):
             Account("Vi", "0000", "00000-0", 1000.0)
             
-    def test_item_agency_is_none(self):
+    def test_account_agency_is_none(self):
         with pytest.raises(ParamNotValidated):
             Account("Victor", "00000-0", 1000.0)
             
-    def test_item_agency_is_not_string(self):
+    def test_account_agency_is_not_string(self):
         with pytest.raises(ParamNotValidated):
             Account("Victor", 0000, "00000-0", 1000.0)
             
@@ -45,10 +45,10 @@ class Test_Account:
         with pytest.raises(ParamNotValidated):
             Account("Victor", "0000", "000000", 1000.0)
             
-    def test_current_balance_is_none(self):
+    def test_account_current_balance_is_none(self):
         with pytest.raises(ParamNotValidated):
             Account("Victor", "0000", "000000")
         
-    def test_current_balance_is_not_float(self):
+    def test_account_current_balance_is_not_float(self):
         with pytest.raises(ParamNotValidated):
             Account("Victor", "0000", "000000", "1000.0")
