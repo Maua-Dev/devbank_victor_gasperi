@@ -15,18 +15,24 @@ class AccountRepositoryMock(IAccountRepository):
     def get_account(self, account_id):
         return self.accounts.get(account_id, None)
     
-    def update_current_balance(self, account, transaction):
-
+    def make_deposit(self, account, value):
+        
+        
         if account is not None:
 
-            match transaction.transaction_type:
-
-                case TransationsType.DEPOSIT:
-                    account.current_balance += transaction.value
-
-                case TransationsType.WITHDRAW:
-                    account.current_balance -= transaction.value
+            account.current_balance += value
 
         return account
+    
+    def make_withdraw(self, account, value):
+         
+        if account is not None:
+             
+            if account.current_balance >= value:
+                 
+                account.current_balance -= value
+
+        return account
+
     
     

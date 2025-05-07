@@ -15,8 +15,15 @@ class IAccountRepository(ABC):
         pass
 
     @abstractmethod
-    def update_current_balance(self, account: Account, transaction: Transaction) -> Optional[Account]:
+    def make_deposit(self, account: Account, value: float) -> Optional[Account]:
         '''
-        Updates the account current balance, given the Account and the Transaction
-        ''' 
+        Make a deposit
+        '''
+        pass
+
+    @abstractmethod
+    def make_withdraw(self, account: Account, value: float) -> Optional[Account]:
+        '''
+        Make a withdraw
+        '''
         pass
