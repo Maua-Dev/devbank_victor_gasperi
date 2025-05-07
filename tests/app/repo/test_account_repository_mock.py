@@ -18,36 +18,22 @@ class Test_AccountRepositoryMock:
         account = repo.get_account(account_id=10)
         assert account is None
 
-    def test_update_current_balance_deposit(self):
+    def test_make_deposit(self):
 
         repo = AccountRepositoryMock()
-        curr_timestamp = time.time()
-        account = repo.get_account(account_id=1)
-        transaction = Transaction(transaction_type=TransationsType.DEPOSIT, value=100.0, timestamp=curr_timestamp)
-        response = repo.update_current_balance(account, transaction)
-        expected = {
-            "name": "Victor Gasperi",
-            "agency": "1111",
-            "account": "11111-1",
-            "current_balance": 1100.0
-        }
+        account = repo.get_account(1)
 
-        assert response.to_dict() == expected
-        
-    def test_update_current_balance_withdraw(self):
+        repo.make_deposit(account, 200.0)
+
+        assert account.current_balance == 1200.0
+
+    def test_make_withdraw(self):
 
         repo = AccountRepositoryMock()
-        curr_timestamp = time.time()
-        account = repo.get_account(account_id=1)
-        transaction = Transaction(transaction_type=TransationsType.WITHDRAW, value=100.0, timestamp=curr_timestamp)
-        response = repo.update_current_balance(account, transaction)
-        expected = {
-            "name": "Victor Gasperi",
-            "agency": "1111",
-            "account": "11111-1",
-            "current_balance": 900.0
-        }
+        account = repo.get_account(1)
 
-        assert response.to_dict() == expected
+        repo.make_withdraw(account, 400.0)
+
+        assert account.current_balance == 600.0
 
 
