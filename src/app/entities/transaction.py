@@ -6,9 +6,10 @@ from src.app.errors.entity_errors import ParamNotValidated
 class Transaction:
     transaction_type: TransationsType
     value: float
+    curr_balance: float
     timestamp: float
 
-    def __init__(self, transaction_type: TransationsType=None, value: float=None, timestamp: float=None):
+    def __init__(self, transaction_type: TransationsType=None, value: float=None, timestamp: float=None, curr_balance: float=None):
 
         validation_transaction_type = self.validate_type(transaction_type)
         if validation_transaction_type[0] is False:
@@ -24,6 +25,11 @@ class Transaction:
         if validation_timestamp[0] is False:
             raise ParamNotValidated("timestamp", validation_timestamp[1])
         self.timestamp = timestamp
+
+        validation_curr_balance = self.validate_curr_balance(curr_balance)
+        if validation_curr_balance[0] is False:
+            raise ParamNotValidated("curr_balance", validation_curr_balance[1])
+        self.curr_balance = curr_balance
 
     @staticmethod
     def validate_type(transaction_type: TransationsType)  -> Tuple[bool, str]:
@@ -52,16 +58,27 @@ class Transaction:
         if timestamp < 0:
             return (False, "There is no such thing as time travel. Transaction timestamp must be positive")
         return (True, "")
+    
+    @staticmethod
+    def validate_curr_balance(curr_balance: float) -> Tuple[bool, str]:
+        if curr_balance is None:
+            return (False, "Transaction curr_balance is required")
+        if type(curr_balance) != float:
+            return (False, "Transaction curr_balance type must be float")
+        if curr_balance < 0:
+            return (False, "The curr_balance cannot be negative")
+        return (True, "")
 
     def to_dict(self):
         return {
             "type": self.transaction_type.value,
             "value": self.value,
+            "current_balance": self.curr_balance,
             "timestamp": self.timestamp
         }
 
     def __eq__(self, other):
-        return self.transaction_type == other.transaction_type and self.value == other.value and self.timestamp == other.timestamp
+        return self.transaction_type == other.transaction_type and self.value == other.value and self.curr_balance == other.curr_balance and self.timestamp == other.timestamp
     
     def __repr__(self):
-        return f"Transaction(type={self.transaction_type}, value={self.value}, timestamp={self.timestamp})"
+        return f"Transaction(type={self.transaction_type}, value={self.value}, curr_balance={self.curr_balance}, timestamp={self.timestamp})"
