@@ -9,17 +9,19 @@ from src.app.errors.entity_errors import ParamNotValidated
 class Test_Transaction:
     def test_transaction(self):
         curr_timestamp = time.time()
-        transaction = Transaction(TransationsType.DEPOSIT, 100.0, curr_timestamp)
+        transaction = Transaction(TransationsType.DEPOSIT, 100.0, curr_timestamp, 1100.0)
         assert transaction.transaction_type == TransationsType.DEPOSIT
         assert transaction.value == 100.0
         assert transaction.timestamp == curr_timestamp
+        assert transaction.curr_balance == 1100.0
 
     def test_transaction_dict(self):
         curr_timestamp = time.time()
-        transaction = Transaction(TransationsType.WITHDRAW, 100.0, curr_timestamp)
+        transaction = Transaction(TransationsType.WITHDRAW, 100.0, curr_timestamp, 1100.0)
         assert transaction.to_dict() == {
             "type": "withdraw",
             "value": 100.0,
+            "current_balance": 1100.0,
             "timestamp": curr_timestamp
         }
 
@@ -60,3 +62,16 @@ class Test_Transaction:
         curr_timestamp = time.time()
         with pytest.raises(ParamNotValidated):
             Transaction(TransationsType.WITHDRAW, 100.0, -100)
+
+    def test_transaction_curr_balance_is_none(self):
+        with pytest.raises(ParamNotValidated):
+            Transaction(transaction_type=TransationsType.WITHDRAW, value=100.0, timestamp=time.time())
+
+    def test_transaction_timestamp_is_not_float(self):
+        with pytest.raises(ParamNotValidated):
+            Transaction(transaction_type=TransationsType.WITHDRAW, value=100.0, timestamp=time.time(), curr_balance='meu saldo')
+
+    def test_transaction_timestamp_is_negative(self):
+        curr_timestamp = time.time()
+        with pytest.raises(ParamNotValidated):
+            Transaction(transaction_type=TransationsType.WITHDRAW, value=100.0, timestamp=time.time(), curr_balance=-10.0)
