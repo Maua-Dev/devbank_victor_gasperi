@@ -32,6 +32,8 @@ def post_deposit(request: dict):
 
     for (bill, qty) in request.items(): total += int(bill) * qty
 
+    total = float(total)
+
     account = account_repo.get_account(1)
     account = account_repo.make_deposit(account, total)
     transaction = transaction_repo.create_transaction(TransationsType.DEPOSIT, total, time.time(),account.current_balance)
@@ -49,7 +51,9 @@ def post_withdraw(request: dict):
 
     account = account_repo.get_account(1)
     
-    if account.current_balance < total: raise ForbiddenAction('Saldo insuficiente')
+    if account.current_balance < total: raise HTTPException(403, "Saldo insuficiente")
+
+    total = float(total)
 
     account = account_repo.make_withdraw(account, total)
     transaction = transaction_repo.create_transaction(TransationsType.WITHDRAW, total, time.time(), account.current_balance)
