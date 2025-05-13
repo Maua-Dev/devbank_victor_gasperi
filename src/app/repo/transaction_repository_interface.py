@@ -16,7 +16,7 @@ class ITransactionRepository(ABC):
         pass
 
     @abstractmethod
-    def create_transaction(self, transaction_type: TransationsType, transaction_value: float, curr_balance: float) -> Optional[Transaction]:
+    def create_transaction(self, transaction_type: TransationsType, transaction_value: float, transaction_time: float, curr_balance: float) -> Optional[Transaction]:
         '''
         Creates a new transaction, given its type and value
         '''
