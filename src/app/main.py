@@ -29,7 +29,7 @@ def post_deposit(request: dict):
 
     account = account_repo.get_account(1)
     account = account_repo.make_deposit(account, total)
-    transaction = transaction_repo.create_transaction(TransationsType.DEPOSIT, total, round(time.time(), 3),account.current_balance)
+    transaction = transaction_repo.create_transaction(TransationsType.DEPOSIT, total,  round(time.time() * 1000, 3),account.current_balance)
 
     return {
         "current_balance": transaction.curr_balance,
@@ -49,7 +49,7 @@ def post_withdraw(request: dict):
     total = float(total)
 
     account = account_repo.make_withdraw(account, total)
-    transaction = transaction_repo.create_transaction(TransationsType.WITHDRAW, total, time.time(), account.current_balance)
+    transaction = transaction_repo.create_transaction(TransationsType.WITHDRAW, total, round(time.time() * 1000, 3), account.current_balance)
 
     return {
         "current_balance": transaction.curr_balance,
