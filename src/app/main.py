@@ -29,7 +29,7 @@ def post_deposit(request: dict):
 
     account = account_repo.get_account(1)
     account = account_repo.make_deposit(account, total)
-    transaction = transaction_repo.create_transaction(TransationsType.DEPOSIT, total, time.time(),account.current_balance)
+    transaction = transaction_repo.create_transaction(TransationsType.DEPOSIT, total, round(time.time(), 3),account.current_balance)
 
     return {
         "current_balance": transaction.curr_balance,
