@@ -58,7 +58,9 @@ def post_withdraw(request: dict):
 
 @app.get("/history")
 def get_transactions():
-    return transaction_repo.get_all_transactions()
+    return {
+        "all_transactions": transaction_repo.get_all_transactions()
+    }
 
 
 handler = Mangum(app, lifespan="off")
