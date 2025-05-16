@@ -2,8 +2,8 @@
 from enum import Enum
 import os
 
-from src.app.repo.account_repository_interface import IAccountRepository
-from src.app.repo.transaction_repository_interface import ITransactionRepository
+from .repo.account_repository_interface import IAccountRepository
+from .repo.transaction_repository_interface import ITransactionRepository
 
 from .errors.environment_errors import EnvironmentNotFound
 

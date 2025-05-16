@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 
-from src.app.entities.account import Account
-from src.app.entities.transaction import Transaction
-from src.app.enums.transactions_type_enum import TransationsType
+from ..entities.transaction import Transaction
+from ..enums.transactions_type_enum import TransationsType
 
 
 class ITransactionRepository(ABC):

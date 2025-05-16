@@ -1,7 +1,6 @@
 from typing import Dict
-from src.app.entities.account import Account
-from src.app.enums.transactions_type_enum import TransationsType
-from src.app.repo.account_repository_interface import IAccountRepository
+from ..entities.account import Account
+from ..repo.account_repository_interface import IAccountRepository
 
 
 class AccountRepositoryMock(IAccountRepository):
