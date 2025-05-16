@@ -1,5 +1,5 @@
 from typing import Tuple
-from src.app.enums.transactions_type_enum import TransationsType
+from ..enums.transactions_type_enum import TransationsType
 from ..errors.entity_errors import ParamNotValidated
 
 
