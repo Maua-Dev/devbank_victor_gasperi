@@ -56,7 +56,7 @@ def post_withdraw(request: dict):
         "timestamp": transaction.timestamp
     }
 
-@app.post("/history")
+@app.get("/history")
 def get_transactions():
     return transaction_repo.get_all_transactions()
 
